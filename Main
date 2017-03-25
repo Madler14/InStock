@@ -1,0 +1,45 @@
+import requests
+import time
+from bs4 import BeautifulSoup
+import smtplib
+ 
+ 
+username = 'XXXXX@gmail.com'
+password = 'XXXXXX'
+sender = 'XXXXXX@gmail.com'
+receivers = ['XXXXXXXXX']
+ 
+ 
+ 
+ 
+def sendemail(listofstores1):
+            message = """From: From XXXXX <XXXXXX@gmail.com>
+            To: To Brad <XXXXX@vtext.com>
+            Subject: Switch in stock
+            """ + listofstores1
+           
+ 
+            try:
+              smtpObj = smtplib.SMTP('smtp.gmail.com:587')
+              smtpObj.ehlo()
+              smtpObj.starttls()
+              smtpObj.login(username, password)
+              smtpObj.sendmail(sender, receivers, message)         
+              return True
+            except smtplib.SMTPException:
+              return False
+ 
+while True:
+            result =''
+            r = requests.get('http://www.istocknow.com/product/switch')
+            soup = BeautifulSoup(r.content, 'html.parser')
+            storelist = soup.find_all('a', class_='storename')
+            for store in storelist:   
+                        if "TX" in store.text:
+                                    result = result + "\n" + store.text
+                        else:
+                                    continue
+            if result is not '':
+                        sendemail(result)
+                        print (result)
+            time.sleep(300)
