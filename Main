@@ -9,7 +9,7 @@ password = 'XXXXXX'
 sender = 'XXXXXX@gmail.com'
 receivers = ['XXXXXXXXX']
  
- 
+cities = ['Dallas', 'Rockwall'] 
  
  
 def sendemail(listofstores1):
@@ -36,9 +36,9 @@ while True:
             storelist = soup.find_all('a', class_='storename')
             for store in storelist:   
                         if "TX" in store.text:
-                                    result = result + "\n" + store.text
-                        else:
-                                    continue
+                                    for city in cities:
+                                                if city in store.text:
+                                                            result = result + "\n" + store.text
             if result is not '':
                         sendemail(result)
                         print (result)
